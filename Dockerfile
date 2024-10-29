@@ -8,7 +8,6 @@ WORKDIR /app
 COPY requirements.txt .
 COPY src/ ./src/
 COPY setup.py .
-COPY Procfile .
 
 # Install dependencies and clean up in one layer
 RUN pip install --no-cache-dir -r requirements.txt && \
