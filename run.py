@@ -5,10 +5,7 @@ import sys
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)
 
-# First verify we can import the core package
-from src.calendargen import CalendarGenerator, generate_calendar, __version__
-
-# Then import the webapp - now at correct path
+# Import app from the correct location
 from src.webapp.app import app
 
 if __name__ == '__main__':

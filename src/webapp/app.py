@@ -5,7 +5,7 @@ import tempfile
 from datetime import datetime
 import csv
 import io
-from calendargen.generator import generate_calendar
+from src.calendargen.generator import generate_calendar  # Updated import path
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
@@ -98,3 +98,4 @@ def index():
             return render_template('index.html', current_year=datetime.now().year)
 
     return render_template('index.html', current_year=datetime.now().year)
+
