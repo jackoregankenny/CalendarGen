@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-50">
+    <div class="container">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Calendar Generator</h1>
+            <p class="text-secondary">Create your custom calendar with events and holidays</p>
+        </header>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <!-- Event Data Section -->
+                <div class="section">
+                    <h2 class="section-title">Event Data</h2>
+                    <div class="form-group">
+                        <label class="form-label">Upload Events CSV</label>
+                        <div class="upload-area">
+                            <input type="file" id="file" name="file" accept=".csv" class="hidden">
+                            <label for="file" class="cursor-pointer">
+                                <span class="text-primary">Upload a file</span> or drag and drop
+                                <p class="text-secondary text-sm mt-1">CSV files only</p>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="csv_text" class="form-label">Or Paste CSV Content</label>
+                        <textarea class="form-textarea" id="csv_text" name="csv_text" 
+                            placeholder="date,event,type&#10;12-25,Christmas,holiday&#10;04-15,Birthday,birthday&#10;06-20,Anniversary,anniversary"></textarea>
+                    </div>
+                </div>
+
+                <!-- Basic Settings Section -->
+                <div class="section bg-secondary">
+                    <h2 class="section-title">Basic Settings</h2>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="year" class="form-label">Year</label>
+                            <input type="number" class="form-input" id="year" name="year" 
+                                value="{{ current_year }}" required min="1900" max="2100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="orientation" class="form-label">Calendar Orientation</label>
+                            <select class="form-select" id="orientation" name="orientation">
+                                <option value="P">Portrait (Vertical)</option>
+                                <option value="L">Landscape (Horizontal)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paper_size" class="form-label">Paper Size</label>
+                            <select class="form-select" id="paper_size" name="paper_size">
+                                <option value="A4">A4</option>
+                                <option value="Letter">US Letter</option>
+                                <option value="Legal">Legal</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weekstart" class="form-label">Week Starts On</label>
+                            <select class="form-select" id="weekstart" name="weekstart">
+                                <option value="0">Monday</option>
+                                <option value="6">Sunday</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Holiday Settings Section -->
+                <div class="section">
+                    <h2 class="section-title">Holiday Settings</h2>
+                    <div class="form-group">
+                        <label class="form-label">Include Public Holidays:</label>
+                        <div class="radio-group grid-2">
+                            <label class="radio-label">
+                                <input type="radio" name="holidays" value="none" checked class="radio-input">
+                                <span>No Holidays</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="holidays" value="irish" class="radio-input">
+                                <span>Irish Holidays</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="holidays" value="uk" class="radio-input">
+                                <span>UK Holidays</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="holidays" value="us" class="radio-input">
+                                <span>US Holidays</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Style Settings Section -->
+                <div class="section bg-secondary">
+                    <h2 class="section-title">Style Settings</h2>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label for="header_size" class="form-label">Header Font Size</label>
+                            <input type="number" class="form-input" id="header_size" name="header_size" 
+                                value="24" min="12" max="48">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="event_size" class="form-label">Event Font Size</label>
+                            <input type="number" class="form-input" id="event_size" name="event_size" 
+                                value="10" min="8" max="16">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cell_padding" class="form-label">Cell Padding (mm)</label>
+                            <input type="number" class="form-input" id="cell_padding" name="cell_padding" 
+                                value="3" min="1" max="10" step="0.5">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="header_color" class="form-label">Header Color</label>
+                            <input type="color" class="color-input" id="header_color" name="header_color" 
+                                value="#333333">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="grid_color" class="form-label">Grid Color</label>
+                            <input type="color" class="color-input" id="grid_color" name="grid_color" 
+                                value="#000000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="holiday_color" class="form-label">Holiday Color</label>
+                            <input type="color" class="color-input" id="holiday_color" name="holiday_color" 
+                                value="#FF0000">
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label for="color_scheme" class="form-label">Color Scheme</label>
+                            <select class="form-select" id="color_scheme" name="color_scheme">
+                                <option value="minimal">Minimal</option>
+                                <option value="dark">Dark</option>
+                                <option value="ocean">Ocean</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="grid_width" class="form-label">Grid Width</label>
+                            <input type="number" class="form-input" id="grid_width" name="grid_width" 
+                                value="0.5" min="0" max="2" step="0.1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="corner_radius" class="form-label">Corner Radius</label>
+                            <input type="number" class="form-input" id="corner_radius" name="corner_radius" 
+                                value="2" min="0" max="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="compact_mode" class="form-label">Layout Style</label>
+                            <select class="form-select" id="compact_mode" name="compact_mode">
+                                <option value="false">Spacious</option>
+                                <option value="true">Compact</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label mt-6">
+                                <input type="checkbox" id="show_weekends" name="show_weekends" 
+                                    class="checkbox-input" checked>
+                                <span>Highlight Weekends</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="section bg-secondary flex justify-end">
+                    <button type="submit" class="btn btn-primary">
+                        Generate Calendar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sample CSV Format -->
+        <div class="card mt-8">
+            <div class="section">
+                <h3 class="section-title">Sample CSV Format</h3>
+                <div class="code-sample">date,event,type
+12-25,Christmas Party,holiday
+04-15,Dad's Birthday,birthday
+06-20,Anniversary,anniversary
+2024-01-01,New Year Party,other</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
