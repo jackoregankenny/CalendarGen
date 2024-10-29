@@ -1,12 +1,15 @@
 import os
 import sys
 
-# Get the absolute path of the project root
+# Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
-src_path = os.path.join(project_root, 'src')
-sys.path.insert(0, src_path)
+sys.path.insert(0, project_root)
 
-from calendargen.webapp.app import app
+# First verify we can import the core package
+from src.calendargen import CalendarGenerator, generate_calendar, __version__
+
+# Then import the webapp - now at correct path
+from src.webapp.app import app
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 4321))
