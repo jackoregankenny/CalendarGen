@@ -8,6 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 COPY src/ ./src/
 COPY setup.py .
+COPY Procfile .
 
 # Install dependencies and clean up in one layer
 RUN pip install --no-cache-dir -r requirements.txt && \
@@ -22,4 +23,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Command to run the application
-CMD gunicorn --bind 0.0.0.0:$PORT src.webapp.app:app
+CMD gunicorn --bind 0.0.0.0:$PORT src.webapp.app:app --log-file -
