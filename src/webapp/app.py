@@ -98,8 +98,3 @@ def index():
             return render_template('index.html', current_year=datetime.now().year)
 
     return render_template('index.html', current_year=datetime.now().year)
-
-if __name__ == '__main__':
-    # This block will only run for direct Python execution
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)

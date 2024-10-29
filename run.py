@@ -8,9 +8,5 @@ sys.path.insert(0, project_root)
 from webapp.app import app
 
 if __name__ == '__main__':
-    # Allow external access and set port explicitly
-    app.run(
-        host='0.0.0.0',  # Allow external access
-        port=4321,       # Specify port
-        debug=True       # Keep debug mode for development
-    )
+    port = int(os.environ.get('PORT', 4321))  # Default to 4321
+    app.run(host='0.0.0.0', port=port, debug=True)
