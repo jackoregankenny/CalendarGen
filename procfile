@@ -1,0 +1,3 @@
+Build command: pip install -r requirements.txt
+Run command: gunicorn --bind 0.0.0.0:$PORT src.webapp.app:app
+Work directory: /

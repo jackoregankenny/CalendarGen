@@ -8,7 +8,7 @@ import io
 from calendargen.generator import generate_calendar
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here')
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
 # Configuration
 ALLOWED_EXTENSIONS = {'csv'}
@@ -100,5 +100,6 @@ def index():
     return render_template('index.html', current_year=datetime.now().year)
 
 if __name__ == '__main__':
-    # Development only
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    # This block will only run for direct Python execution
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
