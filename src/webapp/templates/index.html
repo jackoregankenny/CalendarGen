@@ -6,12 +6,18 @@
     <title>Calendar Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <meta charset="UTF-8">
+        <meta name="description" content="Custom Printable Calendar Generator">
+        <meta name="keywords" content="Calendar, Gnerate Calendar, Calendar Maker, Calendar Site">
+        <meta name="author" content="Jack O'Regan Kenny">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="bg-gray-50">
     <div class="container">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold text-gray-900 mb-2">Jacks Calendar Generator</h1>
-            <p class="text-secondary">Create your custom calendar with events and holidays</p>
+            <p class="text-secondary">Create your custom calendar with events and holidays from a CSV</p>
+            <p class="text-secondary">Built for my Grandad, free for everyone</p>
         </header>
         
         {% with messages = get_flashed_messages() %}
